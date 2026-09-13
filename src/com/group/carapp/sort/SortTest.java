@@ -9,7 +9,7 @@ public class SortTest {
         System.out.println("Проверка сортировок:");
         System.out.println();
 
-        SortStrategy[] strategies = {new SortLicensePlate(), new SortBrand()};
+        SortStrategy[] strategies = {new SortLicensePlate(), new SortBrand(), new SortPrice()};
 
         for (SortStrategy strategy : strategies) {
             System.out.println("Стратегия: " + strategy.getName());
@@ -24,9 +24,9 @@ public class SortTest {
 
     private static void testSorting(SortStrategy strategy) {
         List<Car> cars = new ArrayList<>();
-        cars.add(new Car("C333", "Lada", 100));
-        cars.add(new Car("A111", "BMW", 200));
-        cars.add(new Car("B222", "Audi", 300));
+        cars.add(new Car("C333", "Lada", 300));
+        cars.add(new Car("A111", "BMW", 100));
+        cars.add(new Car("B222", "Audi", 200));
 
         strategy.sort(cars);
 
@@ -62,21 +62,22 @@ public class SortTest {
 
     private static boolean isSorted(List<Car> cars, SortStrategy strategy) {
         for (int i = 0; i < cars.size() - 1; i++) {
-            String first = fieldOf(cars.get(i), strategy);
-            String second = fieldOf(cars.get(i + 1), strategy);
-            if (first.compareTo(second) > 0) {
+            if (compare(cars.get(i), cars.get(i + 1), strategy) > 0) {
                 return false;
             }
         }
         return true;
     }
 
-    private static String fieldOf(Car car, SortStrategy strategy) {
+    private static int compare(Car first, Car second, SortStrategy strategy) {
         if (strategy instanceof SortLicensePlate) {
-            return car.getLicensePlate();
+            return first.getLicensePlate().compareTo(second.getLicensePlate());
         }
         if (strategy instanceof SortBrand) {
-            return car.getBrand();
+            return first.getBrand().compareTo(second.getBrand());
+        }
+        if (strategy instanceof SortPrice) {
+            return Integer.compare(first.getPrice(), second.getPrice());
         }
         throw new IllegalArgumentException("Неизвестная стратегия");
     }
