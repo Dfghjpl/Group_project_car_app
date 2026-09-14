@@ -12,7 +12,8 @@ public class SortTest {
         SortStrategy[] strategies = {
                 new SortLicensePlate(),
                 new SortBrand(),
-                new SortPrice()
+                new SortPrice(),
+                new SortAllFields()
         };
 
         for (SortStrategy strategy : strategies) {
@@ -92,7 +93,7 @@ public class SortTest {
         cars.add(new Car("B222", "BMW", 200));
         try {
             strategy.sort(cars);
-            throw new AssertionError(strategy.getName() + ": не обработан пустой элемент в списке");
+            throw new AssertionError(strategy.getName() + ": не обработан null-элемент в списке");
         } catch (IllegalArgumentException e) {
             System.out.println("  " + e.getMessage());
         }
@@ -116,6 +117,13 @@ public class SortTest {
         }
         if (strategy instanceof SortPrice) {
             return Integer.compare(first.getPrice(), second.getPrice());
+        }
+        if (strategy instanceof SortAllFields) {
+            int byBrand = first.getBrand().compareTo(second.getBrand());
+            if (byBrand != 0) return byBrand;
+            int byPrice = Integer.compare(first.getPrice(), second.getPrice());
+            if (byPrice != 0) return byPrice;
+            return first.getLicensePlate().compareTo(second.getLicensePlate());
         }
         throw new IllegalArgumentException("Неизвестная стратегия");
     }

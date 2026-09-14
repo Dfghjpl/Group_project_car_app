@@ -29,18 +29,25 @@ public class SortEvenPrice implements SortStrategy {
             }
         }
 
-        for (int i = 1; i < evenCars.size(); i++) {
-            Car current = evenCars.get(i);
-            int j = i - 1;
-            while (j >= 0 && evenCars.get(j).getPrice() > current.getPrice()) {
-                evenCars.set(j + 1, evenCars.get(j));
-                j--;
-            }
-            evenCars.set(j + 1, current);
-        }
+        shellSort(evenCars);
 
         for (int i = 0; i < evenIndexes.size(); i++) {
             cars.set(evenIndexes.get(i), evenCars.get(i));
+        }
+    }
+
+    private void shellSort(List<Car> cars) {
+        int n = cars.size();
+        for (int gap = n / 2; gap > 0; gap /= 2) {
+            for (int i = gap; i < n; i++) {
+                Car current = cars.get(i);
+                int j = i;
+                while (j >= gap && cars.get(j - gap).getPrice() > current.getPrice()) {
+                    cars.set(j, cars.get(j - gap));
+                    j -= gap;
+                }
+                cars.set(j, current);
+            }
         }
     }
 
