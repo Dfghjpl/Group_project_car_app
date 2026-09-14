@@ -9,7 +9,11 @@ public class SortTest {
         System.out.println("Проверка сортировок:");
         System.out.println();
 
-        SortStrategy[] strategies = {new SortLicensePlate(), new SortBrand(), new SortPrice()};
+        SortStrategy[] strategies = {
+                new SortLicensePlate(),
+                new SortBrand(),
+                new SortPrice()
+        };
 
         for (SortStrategy strategy : strategies) {
             System.out.println("Стратегия: " + strategy.getName());
@@ -19,7 +23,41 @@ public class SortTest {
             System.out.println();
         }
 
+        SortStrategy evenStrategy = new SortEvenPrice();
+        System.out.println("Стратегия: " + evenStrategy.getName());
+        testSortEvenPrice();
+        testNullList(evenStrategy);
+        testNullElement(evenStrategy);
+        System.out.println();
+
         System.out.println("Все сортировки работают корректно.");
+    }
+
+    private static void testSortEvenPrice() {
+        List<Car> cars = new ArrayList<>();
+        cars.add(new Car("A111", "BMW", 1000));
+        cars.add(new Car("B222", "Audi", 1501));
+        cars.add(new Car("C333", "Lada", 2000));
+        cars.add(new Car("D444", "Ford", 1701));
+        cars.add(new Car("E555", "Kia", 500));
+
+        new SortEvenPrice().sort(cars);
+
+        checkPrice(cars.get(0), 500);
+        checkPrice(cars.get(1), 1501);
+        checkPrice(cars.get(2), 1000);
+        checkPrice(cars.get(3), 1701);
+        checkPrice(cars.get(4), 2000);
+
+        for (Car car : cars) {
+            System.out.println("  " + car.getLicensePlate() + " " + car.getBrand() + " " + car.getPrice());
+        }
+    }
+
+    private static void checkPrice(Car car, int expectedPrice) {
+        if (car.getPrice() != expectedPrice) {
+            throw new AssertionError("Ожидалась цена " + expectedPrice + ", получена " + car.getPrice());
+        }
     }
 
     private static void testSorting(SortStrategy strategy) {
