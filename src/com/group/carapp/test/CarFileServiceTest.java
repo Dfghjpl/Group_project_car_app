@@ -1,7 +1,7 @@
-package test;
+package com.group.carapp.test;
 
-import file.CarFileService;
-import model.Car;
+import com.group.carapp.file.CarFileService;
+import com.group.carapp.model.Car;
 import java.util.ArrayList;
 import java.util.List;
 

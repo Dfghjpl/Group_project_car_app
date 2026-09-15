@@ -1,6 +1,6 @@
-package test;
+package com.group.carapp.test;
 
-import model.Car;
+import com.group.carapp.model.Car;
 
 // Этот класс проверяет создание объектов Car через Builder
 // Здесь проверяем корректные данные и основные ошибки валидации
