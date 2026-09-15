@@ -1,7 +1,7 @@
 package collection;
 
-import sort.Car;
 import java.util.List;
+import model.Car;
 
 public class CarStreamFiller {
 
