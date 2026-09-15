@@ -1,5 +1,6 @@
-package sort;
+package com.group.carapp.sort;
 
+import com.group.carapp.model.Car;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,12 @@ public class CustomSortTest {
     private static void testSortingByAllFields() {
         List<Car> cars = new ArrayList<>();
 
-        cars.add(new Car("C333", "Volvo", 500));
-        cars.add(new Car("A111", "BMW", 700));
-        cars.add(new Car("B222", "Audi", 300));
-        cars.add(new Car("D444", "BMW", 400));
-        cars.add(new Car("F666", "Audi", 200));
-        cars.add(new Car("E555", "Kia", 600));
+        cars.add(createCar("C333", "Volvo", 500));
+        cars.add(createCar("A111", "BMW", 700));
+        cars.add(createCar("B222", "Audi", 300));
+        cars.add(createCar("D444", "BMW", 400));
+        cars.add(createCar("F666", "Audi", 200));
+        cars.add(createCar("E555", "Kia", 600));
 
         CustomSort strategy = new CustomSort();
         strategy.sort(cars);
@@ -47,10 +48,10 @@ public class CustomSortTest {
     private static void testSameBrandDifferentPrice() {
         List<Car> cars = new ArrayList<>();
 
-        cars.add(new Car("A111", "BMW", 900));
-        cars.add(new Car("B222", "BMW", 300));
-        cars.add(new Car("C333", "BMW", 600));
-        cars.add(new Car("D444", "BMW", 100));
+        cars.add(createCar("A111", "BMW", 900));
+        cars.add(createCar("B222", "BMW", 300));
+        cars.add(createCar("C333", "BMW", 600));
+        cars.add(createCar("D444", "BMW", 100));
 
         CustomSort strategy = new CustomSort();
         strategy.sort(cars);
@@ -66,10 +67,10 @@ public class CustomSortTest {
     private static void testSameBrandAndPriceDifferentLicensePlate() {
         List<Car> cars = new ArrayList<>();
 
-        cars.add(new Car("C333", "BMW", 500));
-        cars.add(new Car("A111", "BMW", 500));
-        cars.add(new Car("B222", "BMW", 500));
-        cars.add(new Car("D444", "BMW", 500));
+        cars.add(createCar("C333", "BMW", 500));
+        cars.add(createCar("A111", "BMW", 500));
+        cars.add(createCar("B222", "BMW", 500));
+        cars.add(createCar("D444", "BMW", 500));
 
         CustomSort strategy = new CustomSort();
         strategy.sort(cars);
@@ -80,16 +81,17 @@ public class CustomSortTest {
         checkLicensePlate(cars.get(3), "D444");
 
         System.out.println(
-                "testSameBrandAndPriceDifferentLicensePlate: OK");
+                "testSameBrandAndPriceDifferentLicensePlate: OK"
+        );
     }
 
     private static void testAlreadySorted() {
         List<Car> cars = new ArrayList<>();
 
-        cars.add(new Car("A111", "Audi", 100));
-        cars.add(new Car("B222", "BMW", 200));
-        cars.add(new Car("C333", "Kia", 300));
-        cars.add(new Car("D444", "Volvo", 400));
+        cars.add(createCar("A111", "Audi", 100));
+        cars.add(createCar("B222", "BMW", 200));
+        cars.add(createCar("C333", "Kia", 300));
+        cars.add(createCar("D444", "Volvo", 400));
 
         CustomSort strategy = new CustomSort();
         strategy.sort(cars);
@@ -109,7 +111,8 @@ public class CustomSortTest {
             strategy.sort(null);
 
             throw new AssertionError(
-                    "Не обработан null вместо списка");
+                    "Не обработан null вместо списка"
+            );
 
         } catch (IllegalArgumentException e) {
             System.out.println("testNullList: OK");
@@ -121,15 +124,16 @@ public class CustomSortTest {
 
         List<Car> cars = new ArrayList<>();
 
-        cars.add(new Car("A111", "Audi", 100));
+        cars.add(createCar("A111", "Audi", 100));
         cars.add(null);
-        cars.add(new Car("B222", "BMW", 200));
+        cars.add(createCar("B222", "BMW", 200));
 
         try {
             strategy.sort(cars);
 
             throw new AssertionError(
-                    "Не обработан null-элемент");
+                    "Не обработан null-элемент"
+            );
 
         } catch (IllegalArgumentException e) {
             System.out.println("testNullElement: OK");
@@ -145,7 +149,8 @@ public class CustomSortTest {
 
         if (!cars.isEmpty()) {
             throw new AssertionError(
-                    "Пустой список был изменён");
+                    "Пустой список был изменён"
+            );
         }
 
         System.out.println("testEmptyList: OK");
@@ -156,17 +161,30 @@ public class CustomSortTest {
 
         List<Car> cars = new ArrayList<>();
 
-        Car car = new Car("A111", "BMW", 500);
+        Car car = createCar("A111", "BMW", 500);
         cars.add(car);
 
         strategy.sort(cars);
 
         if (cars.size() != 1 || cars.get(0) != car) {
             throw new AssertionError(
-                    "Список из одного элемента был изменён");
+                    "Список из одного элемента был изменён"
+            );
         }
 
         System.out.println("testSingleElement: OK");
+    }
+
+    private static Car createCar(
+            String licensePlate,
+            String brand,
+            int price) {
+
+        return new Car.Builder()
+                .setLicensePlate(licensePlate)
+                .setBrand(brand)
+                .setPrice(price)
+                .build();
     }
 
     private static void checkCar(
@@ -187,17 +205,23 @@ public class CustomSortTest {
                             + ", получен: "
                             + actual.getLicensePlate() + " "
                             + actual.getBrand() + " "
-                            + actual.getPrice());
+                            + actual.getPrice()
+            );
         }
     }
 
-    private static void checkPrice(Car car, int expectedPrice) {
+    private static void checkPrice(
+            Car car,
+            int expectedPrice) {
+
         if (car.getPrice() != expectedPrice) {
+
             throw new AssertionError(
                     "Неверный порядок цен. Ожидалось: "
                             + expectedPrice
                             + ", получено: "
-                            + car.getPrice());
+                            + car.getPrice()
+            );
         }
     }
 
@@ -210,7 +234,8 @@ public class CustomSortTest {
                     "Неверный порядок госномеров. Ожидалось: "
                             + expectedLicensePlate
                             + ", получено: "
-                            + car.getLicensePlate());
+                            + car.getLicensePlate()
+            );
         }
     }
 
@@ -221,7 +246,8 @@ public class CustomSortTest {
                             + " "
                             + car.getBrand()
                             + " "
-                            + car.getPrice());
+                            + car.getPrice()
+            );
         }
     }
 }
