@@ -1,7 +1,6 @@
-package thread;
+package com.group.carapp.thread;
 
-import sort.Car;
-
+import com.group.carapp.model.Car;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,20 +13,21 @@ public class CarOccurrenceCounterTest {
 
         System.out.println();
         System.out.println(
-                "Все тесты CarOccurrenceCounter пройдены.");
+                "Все тесты CarOccurrenceCounter пройдены."
+        );
     }
 
     private static void testCount() {
-        Car target = new Car("A111", "BMW", 100);
+        Car target = createCar("A111", "BMW", 100);
 
         List<Car> cars = new ArrayList<>();
 
         cars.add(target);
-        cars.add(new Car("B222", "Audi", 200));
+        cars.add(createCar("B222", "Audi", 200));
         cars.add(target);
-        cars.add(new Car("C333", "Lada", 300));
+        cars.add(createCar("C333", "Lada", 300));
         cars.add(target);
-        cars.add(new Car("D444", "Ford", 400));
+        cars.add(createCar("D444", "Ford", 400));
 
         CarOccurrenceCounter counter =
                 new CarOccurrenceCounter();
@@ -37,15 +37,18 @@ public class CarOccurrenceCounterTest {
         if (result != 3) {
             throw new AssertionError(
                     "Ожидалось 3 вхождения, получено: "
-                            + result);
+                            + result
+            );
         }
 
         System.out.println("testCount: OK");
-        System.out.println("Количество вхождений: " + result);
+        System.out.println(
+                "Количество вхождений: " + result
+        );
     }
 
     private static void testEmptyList() {
-        Car target = new Car("A111", "BMW", 100);
+        Car target = createCar("A111", "BMW", 100);
 
         List<Car> cars = new ArrayList<>();
 
@@ -56,14 +59,15 @@ public class CarOccurrenceCounterTest {
 
         if (result != 0) {
             throw new AssertionError(
-                    "Для пустого списка ожидалось 0");
+                    "Для пустого списка ожидалось 0"
+            );
         }
 
         System.out.println("testEmptyList: OK");
     }
 
     private static void testInvalidThreadCount() {
-        Car target = new Car("A111", "BMW", 100);
+        Car target = createCar("A111", "BMW", 100);
 
         List<Car> cars = new ArrayList<>();
         cars.add(target);
@@ -75,10 +79,25 @@ public class CarOccurrenceCounterTest {
             counter.count(cars, target, 0);
 
             throw new AssertionError(
-                    "Не обработано недопустимое количество потоков");
+                    "Не обработано некорректное количество потоков"
+            );
+
         } catch (IllegalArgumentException e) {
             System.out.println(
-                    "testInvalidThreadCount: OK");
+                    "testInvalidThreadCount: OK"
+            );
         }
+    }
+
+    private static Car createCar(
+            String licensePlate,
+            String brand,
+            int price) {
+
+        return new Car.Builder()
+                .setLicensePlate(licensePlate)
+                .setBrand(brand)
+                .setPrice(price)
+                .build();
     }
 }
