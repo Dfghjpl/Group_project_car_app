@@ -1,6 +1,6 @@
 package collection;
 
-import sort.Car;
+import model.Car;
 
 public class CustomCarList {
 
