@@ -29,6 +29,8 @@ bin/
 ### Mac OS ###
 .DS_Store
 
+
 # Файлы, которые создаются при тестировании
 cars.txt
 cars.json
+
