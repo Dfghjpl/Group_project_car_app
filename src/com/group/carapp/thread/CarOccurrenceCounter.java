@@ -1,7 +1,7 @@
-package thread;
+package com.group.carapp.thread;
 
-import sort.Car;
 import java.util.List;
+import com.group.carapp.model.Car;
 
 public class CarOccurrenceCounter {
 
