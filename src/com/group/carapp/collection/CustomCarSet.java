@@ -1,6 +1,6 @@
-package collection;
+package com.group.carapp.collection;
 
-import sort.Car;
+import com.group.carapp.model.Car;
 
 public class CustomCarSet {
 
@@ -32,8 +32,19 @@ public class CustomCarSet {
     }
 
     public boolean contains(Car car) {
+        if (car == null) {
+            return false;
+        }
+
         for (int i = 0; i < size; i++) {
-            if (elements[i].equals(car)) {
+            Car current = elements[i];
+
+            if (current.getLicensePlate()
+                    .equals(car.getLicensePlate())
+                    && current.getBrand()
+                    .equals(car.getBrand())
+                    && current.getPrice() == car.getPrice()) {
+
                 return true;
             }
         }
