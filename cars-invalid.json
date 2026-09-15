@@ -1,0 +1,17 @@
+[
+  {
+    "licensePlate": "A123BC",
+    "brand": "Toyota",
+    "price": 25000
+  },
+  {
+    "licensePlate": "",
+    "brand": "BMW",
+    "price": 35000
+  },
+  {
+    "licensePlate": "C789EF",
+    "brand": "Audi",
+    "price": -100
+  }
+]
