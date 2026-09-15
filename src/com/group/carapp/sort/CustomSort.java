@@ -1,5 +1,6 @@
-package sort;
+package com.group.carapp.sort;
 
+import com.group.carapp.model.Car;
 import java.util.List;
 
 public class CustomSort implements SortStrategy {
@@ -17,7 +18,21 @@ public class CustomSort implements SortStrategy {
         mergeSort(cars, 0, cars.size() - 1);
     }
 
-    private void mergeSort(List<Car> cars, int left, int right) {
+    @Override
+    public String getName() {
+        return "Custom Sort";
+    }
+
+    private void mergeSort(
+            List<Car> cars,
+            int left,
+            int right) {
+
+        if (left >= right) {
+            return;
+        }
+
+        // Для небольших частей используем сортировку вставками
         if (right - left + 1 <= INSERTION_SORT_THRESHOLD) {
             insertionSort(cars, left, right);
             return;
@@ -28,19 +43,22 @@ public class CustomSort implements SortStrategy {
         mergeSort(cars, left, middle);
         mergeSort(cars, middle + 1, right);
 
-        if (compareCars(cars.get(middle), cars.get(middle + 1)) <= 0) {
-            return;
-        }
-
         merge(cars, left, middle, right);
     }
 
-    private void insertionSort(List<Car> cars, int left, int right) {
+    private void insertionSort(
+            List<Car> cars,
+            int left,
+            int right) {
+
         for (int i = left + 1; i <= right; i++) {
+
             Car current = cars.get(i);
             int j = i - 1;
 
-            while (j >= left && compareCars(cars.get(j), current) > 0) {
+            while (j >= left
+                    && compareCars(cars.get(j), current) > 0) {
+
                 cars.set(j + 1, cars.get(j));
                 j--;
             }
@@ -49,19 +67,24 @@ public class CustomSort implements SortStrategy {
         }
     }
 
-    private void merge(List<Car> cars, int left, int middle, int right) {
+    private void merge(
+            List<Car> cars,
+            int left,
+            int middle,
+            int right) {
+
         int leftSize = middle - left + 1;
         int rightSize = right - middle;
 
-        Car[] leftPart = new Car[leftSize];
-        Car[] rightPart = new Car[rightSize];
+        Car[] leftArray = new Car[leftSize];
+        Car[] rightArray = new Car[rightSize];
 
         for (int i = 0; i < leftSize; i++) {
-            leftPart[i] = cars.get(left + i);
+            leftArray[i] = cars.get(left + i);
         }
 
         for (int i = 0; i < rightSize; i++) {
-            rightPart[i] = cars.get(middle + 1 + i);
+            rightArray[i] = cars.get(middle + 1 + i);
         }
 
         int i = 0;
@@ -69,37 +92,58 @@ public class CustomSort implements SortStrategy {
         int k = left;
 
         while (i < leftSize && j < rightSize) {
-            if (compareCars(leftPart[i], rightPart[j]) <= 0) {
-                cars.set(k, leftPart[i]);
+
+            if (compareCars(
+                    leftArray[i],
+                    rightArray[j]) <= 0) {
+
+                cars.set(k, leftArray[i]);
                 i++;
+
             } else {
-                cars.set(k, rightPart[j]);
+
+                cars.set(k, rightArray[j]);
                 j++;
             }
+
             k++;
         }
 
         while (i < leftSize) {
-            cars.set(k, leftPart[i]);
+            cars.set(k, leftArray[i]);
             i++;
             k++;
         }
 
         while (j < rightSize) {
-            cars.set(k, rightPart[j]);
+            cars.set(k, rightArray[j]);
             j++;
             k++;
         }
     }
 
-    private int compareCars(Car first, Car second) {
-        int byBrand = first.getBrand().compareTo(second.getBrand());
+    /**
+     * Сравнение автомобилей:
+     * 1. По марке
+     * 2. По цене
+     * 3. По государственному номеру
+     */
+    private int compareCars(
+            Car first,
+            Car second) {
+
+        int byBrand =
+                first.getBrand()
+                        .compareTo(second.getBrand());
 
         if (byBrand != 0) {
             return byBrand;
         }
 
-        int byPrice = Integer.compare(first.getPrice(), second.getPrice());
+        int byPrice =
+                Integer.compare(
+                        first.getPrice(),
+                        second.getPrice());
 
         if (byPrice != 0) {
             return byPrice;
@@ -110,6 +154,7 @@ public class CustomSort implements SortStrategy {
     }
 
     private void validateCars(List<Car> cars) {
+
         if (cars == null) {
             throw new IllegalArgumentException(
                     "Список автомобилей не может быть null"
@@ -123,10 +168,5 @@ public class CustomSort implements SortStrategy {
                 );
             }
         }
-    }
-
-    @Override
-    public String getName() {
-        return "Кастомная гибридная сортировка";
     }
 }

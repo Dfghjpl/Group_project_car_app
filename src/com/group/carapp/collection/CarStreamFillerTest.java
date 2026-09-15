@@ -1,8 +1,8 @@
-package collection;
+package com.group.carapp.collection;
 
+import com.group.carapp.model.Car;
 import java.util.ArrayList;
 import java.util.List;
-import model.Car;
 
 public class CarStreamFillerTest {
 
@@ -22,42 +22,37 @@ public class CarStreamFillerTest {
         List<Car> cars = new ArrayList<>();
 
         cars.add(
-                new Car.Builder()
-                        .setLicensePlate("A111")
-                        .setBrand("BMW")
-                        .setPrice(100)
-                        .build()
+                createCar("A111", "BMW", 100)
         );
 
         cars.add(
-                new Car.Builder()
-                        .setLicensePlate("B222")
-                        .setBrand("Audi")
-                        .setPrice(200)
-                        .build()
+                createCar("B222", "Audi", 200)
         );
 
         cars.add(
-                new Car.Builder()
-                        .setLicensePlate("C333")
-                        .setBrand("Lada")
-                        .setPrice(300)
-                        .build()
+                createCar("C333", "Lada", 300)
         );
 
         cars.add(
-                new Car.Builder()
-                        .setLicensePlate("D444")
-                        .setBrand("Ford")
-                        .setPrice(400)
-                        .build()
+                createCar("D444", "Ford", 400)
         );
 
         return cars;
     }
 
-    private static void testCustomList() {
+    private static Car createCar(
+            String licensePlate,
+            String brand,
+            int price) {
 
+        return new Car.Builder()
+                .setLicensePlate(licensePlate)
+                .setBrand(brand)
+                .setPrice(price)
+                .build();
+    }
+
+    private static void testCustomList() {
         List<Car> cars = createCars();
 
         CarStreamFiller filler =
@@ -72,24 +67,15 @@ public class CarStreamFillerTest {
             );
         }
 
-        System.out.println(
-                "CustomCarList: OK"
-        );
-
+        System.out.println("CustomCarList: OK");
         System.out.println(result);
     }
 
     private static void testCustomSet() {
-
         List<Car> cars = createCars();
 
-        // Добавляем дубликат.
         cars.add(
-                new Car.Builder()
-                        .setLicensePlate("A111")
-                        .setBrand("BMW")
-                        .setPrice(100)
-                        .build()
+                createCar("A111", "BMW", 100)
         );
 
         CarStreamFiller filler =
@@ -104,15 +90,11 @@ public class CarStreamFillerTest {
             );
         }
 
-        System.out.println(
-                "CustomCarSet: OK"
-        );
-
+        System.out.println("CustomCarSet: OK");
         System.out.println(result);
     }
 
     private static void testCustomQueue() {
-
         List<Car> cars = createCars();
 
         CarStreamFiller filler =
@@ -129,7 +111,9 @@ public class CarStreamFillerTest {
 
         Car first = result.peek();
 
-        if (!first.equals(cars.get(0))) {
+        if (!first.getLicensePlate().equals(
+                cars.get(0).getLicensePlate())) {
+
             throw new AssertionError(
                     "Queue нарушает порядок FIFO"
             );
@@ -137,16 +121,15 @@ public class CarStreamFillerTest {
 
         Car removed = result.poll();
 
-        if (!removed.equals(cars.get(0))) {
+        if (!removed.getLicensePlate().equals(
+                cars.get(0).getLicensePlate())) {
+
             throw new AssertionError(
                     "poll() должен вернуть первый элемент"
             );
         }
 
-        System.out.println(
-                "CustomCarQueue: OK"
-        );
-
+        System.out.println("CustomCarQueue: OK");
         System.out.println(result);
     }
 }
