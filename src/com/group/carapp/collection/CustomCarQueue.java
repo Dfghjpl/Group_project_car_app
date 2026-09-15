@@ -1,6 +1,6 @@
-package collection;
+package com.group.carapp.collection;
 
-import model.Car;
+import com.group.carapp.model.Car;
 
 public class CustomCarQueue {
 
