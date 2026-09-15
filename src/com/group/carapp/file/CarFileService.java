@@ -1,7 +1,7 @@
 
-package file;
+package com.group.carapp.file;
 
-import model.Car;
+import com.group.carapp.model.Car;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -72,10 +72,10 @@ public class CarFileService {
         String licensePlate = values[0].trim();
         String brand = values[1].trim();
 
-        double price;
+        int price;
 
         try {
-            price = Double.parseDouble(values[2].trim());
+            price = Integer.parseInt(values[2].trim());
         } catch (NumberFormatException exception) {
             throw new IllegalArgumentException(
                     "Цена должна быть числом"
@@ -205,7 +205,7 @@ public class CarFileService {
 
         String licensePlate = null;
         String brand = null;
-        Double price = null;
+        Integer price = null;
 
         // Поля читаем по их названиям, поэтому их порядок
         // внутри JSON-объекта для нас не имеет значения
@@ -237,10 +237,10 @@ public class CarFileService {
 
                 case "price":
                     try {
-                        price = Double.parseDouble(value);
+                        price = Integer.parseInt(value);
                     } catch (NumberFormatException exception) {
                         throw new IllegalArgumentException(
-                                "Цена должна быть числом"
+                                "Цена должна быть целым числом"
                         );
                     }
                     break;

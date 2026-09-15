@@ -1,4 +1,4 @@
-package model;
+package com.group.carapp.model;
 
 // Класс описывает автомобиль, который используется в программе
 // Объект Car создается через Builder и проходит проверку данных
@@ -6,7 +6,7 @@ package model;
 public class Car {
     private final String licensePlate;
     private final String brand;
-    private final double price;
+    private final int price;
 
     // Конструктор закрыт, чтобы объект Car создавался только через Builder
     // Значения полей берем из Builder после того, как они прошли валидацию
@@ -24,7 +24,7 @@ public class Car {
         return brand;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
@@ -44,7 +44,7 @@ public class Car {
 
         private String licensePlate;
         private String brand;
-        private double price;
+        private int price;
 
         // Возвращаем сам Builder, чтобы можно было использовать цепочку вызовов
         public Builder setLicensePlate(String licensePlate) {
@@ -57,7 +57,7 @@ public class Car {
             return this;
         }
 
-        public Builder setPrice(double price) {
+        public Builder setPrice(int price) {
             this.price = price;
             return this;
         }
