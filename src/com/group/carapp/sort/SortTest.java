@@ -1,5 +1,7 @@
 package com.group.carapp.sort;
 
+import com.group.carapp.model.Car;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,16 +33,16 @@ public class SortTest {
         testNullElement(evenStrategy);
         System.out.println();
 
-        System.out.println("Все сортировки работают корректно.");
+        System.out.println("Все сортировки работают ");
     }
 
     private static void testSortEvenPrice() {
         List<Car> cars = new ArrayList<>();
-        cars.add(new Car("A111", "BMW", 1000));
-        cars.add(new Car("B222", "Audi", 1501));
-        cars.add(new Car("C333", "Lada", 2000));
-        cars.add(new Car("D444", "Ford", 1701));
-        cars.add(new Car("E555", "Kia", 500));
+        cars.add(build("A111", "BMW", 1000));
+        cars.add(build("B222", "Audi", 1501));
+        cars.add(build("C333", "Lada", 2000));
+        cars.add(build("D444", "Ford", 1701));
+        cars.add(build("E555", "Kia", 500));
 
         new SortEvenPrice().sort(cars);
 
@@ -63,9 +65,9 @@ public class SortTest {
 
     private static void testSorting(SortStrategy strategy) {
         List<Car> cars = new ArrayList<>();
-        cars.add(new Car("C333", "Lada", 300));
-        cars.add(new Car("A111", "BMW", 100));
-        cars.add(new Car("B222", "Audi", 200));
+        cars.add(build("C333", "Lada", 300));
+        cars.add(build("A111", "BMW", 100));
+        cars.add(build("B222", "Audi", 200));
 
         strategy.sort(cars);
 
@@ -88,12 +90,12 @@ public class SortTest {
 
     private static void testNullElement(SortStrategy strategy) {
         List<Car> cars = new ArrayList<>();
-        cars.add(new Car("A111", "Audi", 100));
+        cars.add(build("A111", "Audi", 100));
         cars.add(null);
-        cars.add(new Car("B222", "BMW", 200));
+        cars.add(build("B222", "BMW", 200));
         try {
             strategy.sort(cars);
-            throw new AssertionError(strategy.getName() + ": не обработан null-элемент в списке");
+            throw new AssertionError(strategy.getName() + ": не обработан пустой элемент в списке");
         } catch (IllegalArgumentException e) {
             System.out.println("  " + e.getMessage());
         }
@@ -126,5 +128,13 @@ public class SortTest {
             return first.getLicensePlate().compareTo(second.getLicensePlate());
         }
         throw new IllegalArgumentException("Неизвестная стратегия");
+    }
+
+    private static Car build(String licensePlate, String brand, int price) {
+        return new Car.Builder()
+                .setLicensePlate(licensePlate)
+                .setBrand(brand)
+                .setPrice(price)
+                .build();
     }
 }

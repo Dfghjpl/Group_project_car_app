@@ -1,5 +1,7 @@
 package com.group.carapp.sort;
 
+import com.group.carapp.model.Car;
+
 import java.util.ArrayList;
 import java.util.List;
 
