@@ -1,9 +1,8 @@
 package collection;
 
-import sort.Car;
-
 import java.util.ArrayList;
 import java.util.List;
+import model.Car;
 
 public class CarStreamFillerTest {
 
@@ -23,19 +22,35 @@ public class CarStreamFillerTest {
         List<Car> cars = new ArrayList<>();
 
         cars.add(
-                new Car("A111", "BMW", 100)
+                new Car.Builder()
+                        .setLicensePlate("A111")
+                        .setBrand("BMW")
+                        .setPrice(100)
+                        .build()
         );
 
         cars.add(
-                new Car("B222", "Audi", 200)
+                new Car.Builder()
+                        .setLicensePlate("B222")
+                        .setBrand("Audi")
+                        .setPrice(200)
+                        .build()
         );
 
         cars.add(
-                new Car("C333", "Lada", 300)
+                new Car.Builder()
+                        .setLicensePlate("C333")
+                        .setBrand("Lada")
+                        .setPrice(300)
+                        .build()
         );
 
         cars.add(
-                new Car("D444", "Ford", 400)
+                new Car.Builder()
+                        .setLicensePlate("D444")
+                        .setBrand("Ford")
+                        .setPrice(400)
+                        .build()
         );
 
         return cars;
@@ -70,7 +85,11 @@ public class CarStreamFillerTest {
 
         // Добавляем дубликат.
         cars.add(
-                new Car("A111", "BMW", 100)
+                new Car.Builder()
+                        .setLicensePlate("A111")
+                        .setBrand("BMW")
+                        .setPrice(100)
+                        .build()
         );
 
         CarStreamFiller filler =
