@@ -1,7 +1,7 @@
-package collection;
+package com.group.carapp.collection;
 
+import com.group.carapp.model.Car;
 import java.util.List;
-import model.Car;
 
 public class CarStreamFiller {
 
