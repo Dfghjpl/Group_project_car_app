@@ -3,6 +3,9 @@ package com.group.carapp.menu;
 import com.group.carapp.collection.CarStreamFiller;
 import com.group.carapp.collection.CustomCarList;
 import com.group.carapp.file.CarFileService;
+import com.group.carapp.sort.SortEvenPriceBubble;
+import com.group.carapp.sort.SortEvenPriceInsertion;
+import com.group.carapp.sort.SortEvenPriceSelection;
 import com.group.carapp.model.Car;
 import com.group.carapp.sort.*;
 import com.group.carapp.thread.CarOccurrenceCounter;
@@ -27,8 +30,10 @@ public class Menu {
         strategies.put(6, new SortLicensePlate());
         strategies.put(7,new SortBrand());
         strategies.put(8, new SortPrice());
-        strategies.put(9,new SortEvenPrice());
-        strategies.put(10, new SortAllFields());
+        strategies.put(9, new SortEvenPriceBubble());
+        strategies.put(10, new SortEvenPriceInsertion());
+        strategies.put(11, new SortEvenPriceSelection());
+        strategies.put(12, new SortAllFields());
     }
     private void printMenu() {
         System.out.println("\n=== МЕНЮ ===");
@@ -40,12 +45,14 @@ public class Menu {
         System.out.println("6. Сортировка по госномеру");
         System.out.println("7. Сортировка по марке");
         System.out.println("8. Сортировка по цене");
-        System.out.println("9. Сортировка чёт/нечет по цене (ДЗ1)");
-        System.out.println("10. Сортировка по всем полям");
-        System.out.println("11. Сохранить массив в файл (ДЗ2)");
-        System.out.println("12. Подсчитать вхождения (ДЗ4)");
-        System.out.println("13. Заполнить кастомную коллекцию (ДЗ3*)");
-        System.out.println("14. Очистить текущий массив");
+        System.out.println("9. Сортировка чёт/нечет по цене — пузырёк (ДЗ1)");
+        System.out.println("10. Сортировка чёт/нечет по цене — вставка (ДЗ1)");
+        System.out.println("11. Сортировка чёт/нечет по цене — выбор (ДЗ1)");
+        System.out.println("12. Сортировка по всем полям");
+        System.out.println("13. Сохранить массив в файл (ДЗ2)");
+        System.out.println("14. Подсчитать вхождения (ДЗ4)");
+        System.out.println("15. Заполнить кастомную коллекцию (ДЗ3*)");
+        System.out.println("16. Очистить массив");
         System.out.println("0. Выход");
     }
 
@@ -71,11 +78,11 @@ public class Menu {
                 case 3 -> loadFromJson();
                 case 4 -> fillRandomly();
                 case 5 -> printCars();
-                case 6,7,8,9,10 -> applyStrategy(choice);
-                case 11 -> saveToFile();
-                case 12 -> countOccurrences();
-                case 13 -> fillCustomCollection();
-                case 14 -> clearCars();
+                case 6, 7, 8, 9, 10, 11, 12 -> applyStrategy(choice);
+                case 13 -> saveToFile();
+                case 14 -> countOccurrences();
+                case 15 -> fillCustomCollection();
+                case 16 -> clearCars();
                 case 0 -> {
                     runing = false;
                     System.out.println("Выход из программы.");

@@ -4,17 +4,11 @@ import com.group.carapp.collection.CarStreamFiller;
 import com.group.carapp.collection.CustomCarList;
 import com.group.carapp.file.CarFileService;
 import com.group.carapp.model.Car;
-import com.group.carapp.sort.SortBrand;
-import com.group.carapp.sort.SortAllFields;
-import com.group.carapp.sort.SortEvenPrice;
-import com.group.carapp.sort.SortLicensePlate;
-import com.group.carapp.sort.SortPrice;
-import com.group.carapp.sort.SortStrategy;
+import com.group.carapp.sort.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.group.carapp.sort.*;
 import com.group.carapp.thread.CarOccurrenceCounter;
 
 public class SystemTests {
@@ -25,7 +19,9 @@ public class SystemTests {
     public static void main(String[] args) {
         runTest("Полный цикл", SystemTests::testFullPipeline);
         runTest("Все сортировки", SystemTests::testAllSortingsWork);
-        runTest("ДЗ1: чёт/нечет", SystemTests::testEvenOddSort);
+        runTest("ДЗ1: чёт/нечет (пузырёк)", SystemTests::testEvenOddBubble);
+        runTest("ДЗ1: чёт/нечет (вставка)", SystemTests::testEvenOddInsertion);
+        runTest("ДЗ1: чёт/нечет (выбор)", SystemTests::testEvenOddSelection);
         runTest("ДЗ2: сохранение с добавлением", SystemTests::testSaveAndReload);
         runTest("ДЗ3*: кастомная коллекция", SystemTests::testCustomCollection);
         runTest("ДЗ4: подсчёт вхождений", SystemTests::testOccurrenceCounter);
@@ -81,7 +77,9 @@ public class SystemTests {
                 new SortBrand(),
                 new SortPrice(),
                 new SortAllFields(),
-                new SortEvenPrice()
+                new SortEvenPriceBubble(),
+                new SortEvenPriceInsertion(),
+                new SortEvenPriceSelection()
         };
 
         for (SortStrategy strategy:strategies){
@@ -115,27 +113,47 @@ public class SystemTests {
         }
 
     }
-    private static void testEvenOddSort(){
-        List<Car> cars=new ArrayList<>();
+    private static void testEvenOddBubble() {
+        List<Car> cars = createEvenOddTestData();
+        new SortEvenPriceBubble().sort(cars);
+        checkEvenOddResult(cars);
+    }
+
+    private static void testEvenOddInsertion() {
+        List<Car> cars = createEvenOddTestData();
+        new SortEvenPriceInsertion().sort(cars);
+        checkEvenOddResult(cars);
+    }
+
+    private static void testEvenOddSelection() {
+        List<Car> cars = createEvenOddTestData();
+        new SortEvenPriceSelection().sort(cars);
+        checkEvenOddResult(cars);
+    }
+
+    // Общие данные для всех трёх тестов
+    private static List<Car> createEvenOddTestData() {
+        List<Car> cars = new ArrayList<>();
         cars.add(build("A111", "BMW", 1000));
         cars.add(build("B222", "Audi", 1501));
         cars.add(build("C333", "Kia", 500));
         cars.add(build("D444", "Ford", 1701));
         cars.add(build("E555", "Mazda", 2000));
+        return cars;
+    }
 
-        new SortEvenPrice().sort(cars);
-
-        if (cars.get(1).getPrice()!=1501){
+    // Общая проверка результата
+    private static void checkEvenOddResult(List<Car> cars) {
+        if (cars.get(1).getPrice() != 1501) {
             throw new AssertionError("ДЗ1: нечётный элемент сдвинулся (индекс 1)");
         }
-        if(cars.get(3).getPrice()!=1701){
+        if (cars.get(3).getPrice() != 1701) {
             throw new AssertionError("ДЗ1: нечётный элемент сдвинулся (индекс 3)");
         }
         if (cars.get(0).getPrice() != 500 || cars.get(2).getPrice() != 1000) {
             throw new AssertionError("ДЗ1: чётные не отсортированы");
         }
-    }
-    private static void testOccurrenceCounter() {
+    }private static void testOccurrenceCounter() {
         Car target = build("A111", "BMW", 500);
 
         List<Car> cars = new ArrayList<>();
