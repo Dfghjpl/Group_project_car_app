@@ -1,0 +1,7 @@
+[
+  {"licensePlate": "A111", "brand": "BMW", "price": 500000},
+  {"licensePlate": "B222", "brand": "Audi", "price": 300000},
+  {"licensePlate": "C333", "brand": "Kia", "price": 400000},
+  {"licensePlate": "D444", "brand": "Ford", "price": 250000},
+  {"licensePlate": "E555", "brand": "Mazda", "price": 450000}
+]
