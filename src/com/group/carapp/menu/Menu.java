@@ -45,6 +45,7 @@ public class Menu {
         System.out.println("11. Сохранить массив в файл (ДЗ2)");
         System.out.println("12. Подсчитать вхождения (ДЗ4)");
         System.out.println("13. Заполнить кастомную коллекцию (ДЗ3*)");
+        System.out.println("14. Очистить текущий массив");
         System.out.println("0. Выход");
     }
 
@@ -74,6 +75,7 @@ public class Menu {
                 case 11 -> saveToFile();
                 case 12 -> countOccurrences();
                 case 13 -> fillCustomCollection();
+                case 14 -> clearCars();
                 case 0 -> {
                     runing = false;
                     System.out.println("Выход из программы.");
@@ -82,6 +84,20 @@ public class Menu {
             }
         }
         scanner.close();
+    }
+    private void clearCars(){
+        if (cars.isEmpty()) {
+            System.out.println("Массив уже пуст.");
+            return;
+        }
+        System.out.print("Вы уверены? (да/нет): ");
+        String answer = scanner.nextLine().trim().toLowerCase();
+        if (answer.equals("да") || answer.equals("yes") || answer.equals("y")) {
+            cars.clear();
+            System.out.println("Массив очищен.");
+        } else {
+            System.out.println("Отменено.");
+        }
     }
     private void fillManually(){
         int count = readIntSafely("Сколько автомобилей ввести? ");
@@ -100,7 +116,7 @@ public class Menu {
         }
 
         if (!newCars.isEmpty()){
-            cars=newCars;
+            cars.addAll(newCars);
             System.out.println("Добавлено автомобилей: "+newCars.size());
         }
     }
@@ -132,11 +148,12 @@ public class Menu {
         System.out.print("Введите путь к TXT-файлу: ");
         String path=scanner.nextLine().trim();
         List<Car> loaded=fileService.readFromTxt(path);
-        if (loaded.isEmpty()){
-            System.out.println("Файл пуст или содержит только неккоректные строки.");
-        }else {
-            cars=loaded;
-            System.out.println("Загружено автомобилей: "+ loaded.size());
+        if (loaded.isEmpty()) {
+            System.out.println("Файл пуст или содержит только некорректные строки.");
+        } else {
+            cars.addAll(loaded);   // ← было cars = loaded;
+            System.out.println("Добавлено автомобилей из TXT: " + loaded.size()
+                    + ". Всего в списке: " + cars.size());
         }
     }
 
@@ -144,11 +161,12 @@ public class Menu {
         System.out.print("Введите путь к JSON-файлу: ");
         String path=scanner.nextLine().trim();
         List<Car> loaded=fileService.readFromJson(path);
-        if (loaded.isEmpty()){
-            System.out.println("Файл пуст или содержит только неккоректные строки.");
-        }else {
-            cars=loaded;
-            System.out.println("Загружено автомобилей: "+ loaded.size());
+        if (loaded.isEmpty()) {
+            System.out.println("Файл пуст или содержит только некорректные объекты.");
+        } else {
+            cars.addAll(loaded);   // ← было cars = loaded;
+            System.out.println("Добавлено автомобилей из JSON: " + loaded.size()
+                    + ". Всего в списке: " + cars.size());
         }
     }
     private void fillRandomly() {
@@ -158,9 +176,10 @@ public class Menu {
             return;
         }
 
-        cars = Stream.generate(this::generateRandomCar)
+        List<Car> generated = Stream.generate(this::generateRandomCar)
                 .limit(count)
                 .collect(Collectors.toCollection(ArrayList::new));
+        cars.addAll(generated);
 
         System.out.println("Сгенерировано автомобилей: " + cars.size());
     }
