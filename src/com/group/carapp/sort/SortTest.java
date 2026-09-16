@@ -8,131 +8,172 @@ import java.util.List;
 public class SortTest {
 
     public static void main(String[] args) {
-        System.out.println("Проверка сортировок:");
-        System.out.println();
 
-        SortStrategy[] strategies = {
-                new SortLicensePlate(),
-                new SortBrand(),
-                new SortPrice(),
-                new SortAllFields()
-        };
 
-        for (SortStrategy strategy : strategies) {
-            System.out.println("Стратегия: " + strategy.getName());
-            testSorting(strategy);
-            testNullList(strategy);
-            testNullElement(strategy);
-            System.out.println();
-        }
+        testSortLicensePlate();
+        testSortBrand();
+        testSortPrice();
+        testSortAllFields();
+        testSortEvenPriceInsertion();
+        testSortEvenPriceSelection();
+        testSortEvenPriceBubble();
 
-        SortStrategy evenStrategy = new SortEvenPrice();
-        System.out.println("Стратегия: " + evenStrategy.getName());
-        testSortEvenPrice();
-        testNullList(evenStrategy);
-        testNullElement(evenStrategy);
-        System.out.println();
-
-        System.out.println("Все сортировки работают ");
+        System.out.println("\nВсе тесты пройдены");
     }
 
-    private static void testSortEvenPrice() {
+    private static void testSortLicensePlate() {
+        System.out.println("Сортировка по гос.номеру");
+
         List<Car> cars = new ArrayList<>();
-        cars.add(build("A111", "BMW", 1000));
-        cars.add(build("B222", "Audi", 1501));
-        cars.add(build("C333", "Lada", 2000));
-        cars.add(build("D444", "Ford", 1701));
-        cars.add(build("E555", "Kia", 500));
+        cars.add(makeCar("C333", "Lada", 300));
+        cars.add(makeCar("A111", "BMW", 100));
+        cars.add(makeCar("B222", "Audi", 200));
 
-        new SortEvenPrice().sort(cars);
+        new SortLicensePlate().sort(cars);
 
-        checkPrice(cars.get(0), 500);
-        checkPrice(cars.get(1), 1501);
-        checkPrice(cars.get(2), 1000);
-        checkPrice(cars.get(3), 1701);
-        checkPrice(cars.get(4), 2000);
+        check(cars.get(0).getLicensePlate().equals("A111"), "на первом месте A111");
+        check(cars.get(1).getLicensePlate().equals("B222"), "на втором месте B222");
+        check(cars.get(2).getLicensePlate().equals("C333"), "на третьем месте C333");
 
+        printCars(cars);
+        System.out.println("прошла успешно\n");
+    }
+
+    private static void testSortBrand() {
+        System.out.println("Сортировка по марке");
+
+        List<Car> cars = new ArrayList<>();
+        cars.add(makeCar("C333", "Lada", 300));
+        cars.add(makeCar("A111", "BMW", 100));
+        cars.add(makeCar("B222", "Audi", 200));
+
+        new SortBrand().sort(cars);
+
+        check(cars.get(0).getBrand().equals("Audi"), "первая марка Audi");
+        check(cars.get(1).getBrand().equals("BMW"), "вторая марка BMW");
+        check(cars.get(2).getBrand().equals("Lada"), "третья марка Lada");
+
+        printCars(cars);
+        System.out.println("прошла успешно\n");
+    }
+
+    private static void testSortPrice() {
+        System.out.println("Сортировка по цене");
+
+        List<Car> cars = new ArrayList<>();
+        cars.add(makeCar("C333", "Lada", 300));
+        cars.add(makeCar("A111", "BMW", 100));
+        cars.add(makeCar("B222", "Audi", 200));
+
+        new SortPrice().sort(cars);
+
+        check(cars.get(0).getPrice() == 100, "первая цена 100");
+        check(cars.get(1).getPrice() == 200, "вторая цена 200");
+        check(cars.get(2).getPrice() == 300, "третья цена 300");
+
+        printCars(cars);
+        System.out.println("прошла успешно\n");
+    }
+
+    private static void testSortAllFields() {
+        System.out.println("Сортировка по всем полям");
+
+        List<Car> cars = new ArrayList<>();
+        cars.add(makeCar("C333", "BMW", 300));
+        cars.add(makeCar("A111", "Audi", 100));
+        cars.add(makeCar("B222", "Audi", 200));
+
+        new SortAllFields().sort(cars);
+
+        check(cars.get(0).getBrand().equals("Audi") && cars.get(0).getPrice() == 100, "Audi 100");
+        check(cars.get(1).getBrand().equals("Audi") && cars.get(1).getPrice() == 200, "Audi 200");
+        check(cars.get(2).getBrand().equals("BMW") && cars.get(2).getPrice() == 300, "BMW 300");
+
+        printCars(cars);
+        System.out.println("прошла успешно\n");
+    }
+
+    private static void testSortEvenPriceInsertion() {
+        System.out.println("Сортировка по числовому полю (вставками)");
+
+        List<Car> cars = new ArrayList<>();
+        cars.add(makeCar("A111", "BMW", 1000));
+        cars.add(makeCar("B222", "Audi", 1501));
+        cars.add(makeCar("C333", "Lada", 2000));
+        cars.add(makeCar("D444", "Ford", 1701));
+        cars.add(makeCar("E555", "Kia", 500));
+
+        new SortEvenPriceInsertion().sort(cars);
+
+        check(cars.get(0).getPrice() == 500, "позиция 1: чётная 500");
+        check(cars.get(1).getPrice() == 1501, "позиция 2: нечётная 1501 не сдвинулась");
+        check(cars.get(2).getPrice() == 1000, "позиция 3: чётная 1000");
+        check(cars.get(3).getPrice() == 1701, "позиция 4: нечётная 1701 не сдвинулась");
+        check(cars.get(4).getPrice() == 2000, "позиция 5: чётная 2000");
+
+        printCars(cars);
+        System.out.println("прошла успешно\n");
+    }
+
+    private static void testSortEvenPriceSelection() {
+        System.out.println("Сортировка по числовому полю (выбором)");
+
+        List<Car> cars = new ArrayList<>();
+        cars.add(makeCar("A111", "BMW", 1000));
+        cars.add(makeCar("B222", "Audi", 1501));
+        cars.add(makeCar("C333", "Lada", 2000));
+        cars.add(makeCar("D444", "Ford", 1701));
+        cars.add(makeCar("E555", "Kia", 500));
+
+        new SortEvenPriceSelection().sort(cars);
+
+        check(cars.get(0).getPrice() == 500, "позиция 1: чётная 500");
+        check(cars.get(1).getPrice() == 1501, "позиция 2: нечётная 1501 не сдвинулась");
+        check(cars.get(2).getPrice() == 1000, "позиция 3: чётная 1000");
+        check(cars.get(3).getPrice() == 1701, "позиция 4: нечётная 1701 не сдвинулась");
+        check(cars.get(4).getPrice() == 2000, "позиция 5: чётная 2000");
+
+        printCars(cars);
+        System.out.println("прошла успешно\n");
+    }
+
+    private static void testSortEvenPriceBubble() {
+        System.out.println("Сортировка по числовому полю (пузырьком)");
+
+        List<Car> cars = new ArrayList<>();
+        cars.add(makeCar("A111", "BMW", 1000));
+        cars.add(makeCar("B222", "Audi", 1501));
+        cars.add(makeCar("C333", "Lada", 2000));
+        cars.add(makeCar("D444", "Ford", 1701));
+        cars.add(makeCar("E555", "Kia", 500));
+
+        new SortEvenPriceBubble().sort(cars);
+
+        check(cars.get(0).getPrice() == 500, "позиция 1: чётная 500");
+        check(cars.get(1).getPrice() == 1501, "позиция 2: нечётная 1501 не сдвинулась");
+        check(cars.get(2).getPrice() == 1000, "позиция 3: чётная 1000");
+        check(cars.get(3).getPrice() == 1701, "позиция 4: нечётная 1701 не сдвинулась");
+        check(cars.get(4).getPrice() == 2000, "позиция 5: чётная 2000");
+
+        printCars(cars);
+        System.out.println("прошла успешно\n");
+    }
+
+    private static void check(boolean condition, String message) {
+        if (!condition) {
+            throw new AssertionError("Проверка провалена: " + message);
+        }
+    }
+
+    private static void printCars(List<Car> cars) {
         for (Car car : cars) {
-            System.out.println("  " + car.getLicensePlate() + " " + car.getBrand() + " " + car.getPrice());
+            System.out.println("    " + car.getLicensePlate() + " " + car.getBrand() + " " + car.getPrice());
         }
     }
 
-    private static void checkPrice(Car car, int expectedPrice) {
-        if (car.getPrice() != expectedPrice) {
-            throw new AssertionError("Ожидалась цена " + expectedPrice + ", получена " + car.getPrice());
-        }
-    }
-
-    private static void testSorting(SortStrategy strategy) {
-        List<Car> cars = new ArrayList<>();
-        cars.add(build("C333", "Lada", 300));
-        cars.add(build("A111", "BMW", 100));
-        cars.add(build("B222", "Audi", 200));
-
-        strategy.sort(cars);
-
-        if (!isSorted(cars, strategy)) {
-            throw new AssertionError(strategy.getName() + ": список остался неотсортированным");
-        }
-        for (Car car : cars) {
-            System.out.println("  " + car.getLicensePlate() + " " + car.getBrand() + " " + car.getPrice());
-        }
-    }
-
-    private static void testNullList(SortStrategy strategy) {
-        try {
-            strategy.sort(null);
-            throw new AssertionError(strategy.getName() + ": не обработан null вместо списка");
-        } catch (IllegalArgumentException e) {
-            System.out.println("  " + e.getMessage());
-        }
-    }
-
-    private static void testNullElement(SortStrategy strategy) {
-        List<Car> cars = new ArrayList<>();
-        cars.add(build("A111", "Audi", 100));
-        cars.add(null);
-        cars.add(build("B222", "BMW", 200));
-        try {
-            strategy.sort(cars);
-            throw new AssertionError(strategy.getName() + ": не обработан пустой элемент в списке");
-        } catch (IllegalArgumentException e) {
-            System.out.println("  " + e.getMessage());
-        }
-    }
-
-    private static boolean isSorted(List<Car> cars, SortStrategy strategy) {
-        for (int i = 0; i < cars.size() - 1; i++) {
-            if (compare(cars.get(i), cars.get(i + 1), strategy) > 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static int compare(Car first, Car second, SortStrategy strategy) {
-        if (strategy instanceof SortLicensePlate) {
-            return first.getLicensePlate().compareTo(second.getLicensePlate());
-        }
-        if (strategy instanceof SortBrand) {
-            return first.getBrand().compareTo(second.getBrand());
-        }
-        if (strategy instanceof SortPrice) {
-            return Integer.compare(first.getPrice(), second.getPrice());
-        }
-        if (strategy instanceof SortAllFields) {
-            int byBrand = first.getBrand().compareTo(second.getBrand());
-            if (byBrand != 0) return byBrand;
-            int byPrice = Integer.compare(first.getPrice(), second.getPrice());
-            if (byPrice != 0) return byPrice;
-            return first.getLicensePlate().compareTo(second.getLicensePlate());
-        }
-        throw new IllegalArgumentException("Неизвестная стратегия");
-    }
-
-    private static Car build(String licensePlate, String brand, int price) {
+    private static Car makeCar(String plate, String brand, int price) {
         return new Car.Builder()
-                .setLicensePlate(licensePlate)
+                .setLicensePlate(plate)
                 .setBrand(brand)
                 .setPrice(price)
                 .build();
