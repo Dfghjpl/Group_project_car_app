@@ -1,5 +1,7 @@
 package com.group.carapp.model;
 
+import java.util.Objects;
+
 // Класс описывает автомобиль, который используется в программе
 // Объект Car создается через Builder и проходит проверку данных
 
@@ -26,6 +28,28 @@ public class Car {
 
     public int getPrice() {
         return price;
+    }
+
+    // Сравниваем автомобили по значениям всех полей
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (!(object instanceof Car car)) {
+            return false;
+        }
+
+        return price == car.price
+                && Objects.equals(licensePlate, car.licensePlate)
+                && Objects.equals(brand, car.brand);
+    }
+
+    // Для одинаковых автомобилей hashCode должен быть одинаковым
+    @Override
+    public int hashCode() {
+        return Objects.hash(licensePlate, brand, price);
     }
 
     // Переопределяем toString, чтобы объект Car было удобно выводить в консоль
