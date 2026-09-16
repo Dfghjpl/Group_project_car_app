@@ -12,6 +12,7 @@ public class CarTest {
         testEmptyLicensePlate();
         testEmptyBrand();
         testNegativePrice();
+        testEqualsAndHashCode();
     }
 
     // Проверяем, что автомобиль с корректными данными успешно создается
@@ -93,6 +94,27 @@ public class CarTest {
                     "Негативный тест пройден: "
                             + exception.getMessage()
             );
+        }
+    }
+    // Проверяем сравнение двух автомобилей с одинаковыми данными
+    private static void testEqualsAndHashCode() {
+        Car firstCar = new Car.Builder()
+                .setLicensePlate("A123BC")
+                .setBrand("Toyota")
+                .setPrice(25000)
+                .build();
+
+        Car secondCar = new Car.Builder()
+                .setLicensePlate("A123BC")
+                .setBrand("Toyota")
+                .setPrice(25000)
+                .build();
+
+        if (firstCar.equals(secondCar)
+                && firstCar.hashCode() == secondCar.hashCode()) {
+            System.out.println("Тест equals и hashCode пройден");
+        } else {
+            System.out.println("Тест equals и hashCode не пройден");
         }
     }
 }
