@@ -2,6 +2,7 @@ package com.group.carapp.collection;
 
 import com.group.carapp.model.Car;
 
+//CustomCarList — это реализация списка автомобилей. Внутри использется обычный массив Car[]
 public class CustomCarList {
 
     private Car[] elements; //массив в котором хранятся автомобили

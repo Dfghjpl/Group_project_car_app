@@ -3,41 +3,47 @@ package com.group.carapp.collection;
 import com.group.carapp.model.Car;
 import java.util.List;
 
-public class CarStreamFiller {
+/*
+ * CarStreamFiller берёт список автомобилей List<Car> 
+ * и перекладывает эти автомобили в разные коллекции — CustomCarList, CustomCarSet или CustomCarQueue
+ */
+
+public class CarStreamFiller { //заполняет разные коллекции автомобилями
 
     public CustomCarList fillList(List<Car> cars) {
-        validateCars(cars);
+        validateCars(cars); //проверка на null
 
-        CustomCarList result = new CustomCarList();
+        CustomCarList result = new CustomCarList(); //создаётся пустой список
 
-        cars.stream()
-                .forEach(result::add);
+        cars.stream() //stream() позволяет обрабатывать элементы коллекции последовательно
+                .forEach(result::add); //берет каждую машину из cars и добавляет её в result
 
-        return result;
+        return result; //возвращает заполненный CustomCarList
     }
 
-    public CustomCarSet fillSet(List<Car> cars) {
-        validateCars(cars);
+    public CustomCarSet fillSet(List<Car> cars) { //Set — не хранит дубликаты
+        validateCars(cars); //проверка на null
 
-        CustomCarSet result = new CustomCarSet();
+        CustomCarSet result = new CustomCarSet(); //создается пустой Set
 
-        cars.stream()
-                .forEach(result::add);
+        cars.stream() //stream() позволяет обрабатывать элементы коллекции последовательно
+                .forEach(result::add); //берет каждую машину из cars и добавляет её в result
 
-        return result;
+        return result; //возвращает заполненный CustomCarSet
     }
 
-    public CustomCarQueue fillQueue(List<Car> cars) {
-        validateCars(cars);
+    public CustomCarQueue fillQueue(List<Car> cars) { //Queue - очередь
+        validateCars(cars); //проверка на null
 
-        CustomCarQueue result = new CustomCarQueue();
+        CustomCarQueue result = new CustomCarQueue(); //создается пустая очередь
 
-        cars.stream()
-                .forEach(result::add);
+        cars.stream() //stream() позволяет обрабатывать элементы коллекции последовательно
+                .forEach(result::add); //берет каждую машину из cars и добавляет её в result
 
-        return result;
+        return result; //возвращает заполненный CustomCarQueue
     }
 
+    //Проверки на null
     private void validateCars(List<Car> cars) {
         if (cars == null) {
             throw new IllegalArgumentException(
